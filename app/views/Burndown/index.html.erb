@@ -1,0 +1,87 @@
+<% content_for :header_tags do %>
+<%= javascript_include_tag 'lib/jquery.flot.js', :plugin => 'redmine_scrum_metrics' %>
+<%= javascript_include_tag 'lib/jquery.flot.pie.min.js', :plugin => 'redmine_scrum_metrics' %>
+<%= javascript_include_tag 'lib/underscore-min.js', :plugin => 'redmine_scrum_metrics' %>
+
+<%= javascript_include_tag 'metricasController.js', :plugin => 'redmine_scrum_metrics' %>
+
+<%= stylesheet_link_tag 'bootstrap.min.css', :plugin => 'redmine_scrum_metrics' %>
+<%= stylesheet_link_tag 'redmine_scrum_metrics', :plugin => 'redmine_scrum_metrics' %>
+<% end %>
+
+<% html_title "Métricas" %>
+
+<h2>Métricas do projeto</h2>
+
+<h3>Projeto: <%=@project.name%></h3>
+<h3>Sprint Corrente: <%=@sprint_corrente%></h3>
+<h3>Tipos de Tarefas: <%=@total_tarefas%></h3>
+<h3>Total de tarefas da Sprint: <%=@tarefas_por_sprint.count%></h3>
+
+<table>
+  <tr>
+    <th>id</th>
+    <th>Nome</th>
+  </tr>
+
+<% @tipo_tarefas.each do |item| %>
+  <tr>
+  	<td><%= item.id %></td>
+    <td><%= item.name %></td>
+  </tr>
+<% end %>
+</table>
+
+
+
+<input type='hidden' value="@project.id" id="idProjeto" />
+
+<div class="container">
+	<div class="row">
+		<div class="center box_chart">
+			<h3>Burndown</h3>
+			<div id="chart-burndown" class="chart">
+			</div>
+			<p id="choices" class="span4 pull-right"></p>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="center box_chart">
+			<h3>Métricas</h3>
+			<div id="chart-metrics" class="chart">
+				<svg></svg>
+			</div>
+		</div>
+	</div>
+
+	<div class="row">
+		<h3>Tabela de métricas</h3>
+		<table class="table table-stripped table-bordered ">
+			<thead>
+				<tr>
+					<th>Categoria</th>
+					<th>Baseline</th>
+					<th>Planejado</th>
+					<th>Realizado</th>
+					<th>Desvio</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>Planejadas</td>
+					<td>100 horas</td>
+					<td>100 horas</td>
+					<td>150 horas</td>
+					<td>+50 horas</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+
+
+<script type="text/javascript">
+	var metricsController = new MetricsController()
+	metricsController.drawGraphs()
+</script>
